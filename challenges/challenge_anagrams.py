@@ -1,50 +1,41 @@
-def sort(array):
-    return sort_half(array, 0, len(array) - 1)
-
-
-def sort_half(array, start, end):
-    if start < end:
-        middle = (start + end) // 2
-
-        sort_half(array, start, middle)
-        sort_half(array, middle + 1, end)
-
-        merge(array, start, middle, end)
-
-
-def merge(array, start, middle, end):
-    aux = array[:]
-    left = start
-    left_end = middle + 1
-    arr = start
-
-    while arr <= end:
-        if left > left_end:
-            array[arr] = aux[left_end]
-            left_end += 1
-
-        elif left_end > end:
-            array[arr] = aux[left]
-            left += 1
-
-        elif aux[left] <= aux[left_end]:
-            array[arr] = aux[left]
-            left += 1
-
-        else:
-            array[arr] = aux[left_end]
-            left_end += 1
-
-        arr += 1
-
 
 def is_anagram(first_string, second_string):
-    try:
-        print(sort([2, 3, 9, 4]))
-        print(sort(second_string))
-        if first_string != second_string:
-            raise TypeError
-        if first_string in second_string:
-            return True
-    except TypeError:
-        return False
+    f = list(first_string.lower())
+    s = list(second_string.lower())
+    return sort(f) == sort(s)
+
+# Esse requisito, essas funções de ordenação eu me baseei no course:
+# https://app.betrybe.com/course/computer-science/algoritmos/
+# algoritmos-de-ordenacao-e-busca/29521083-44ea-488d-a74d-216b1ac79b04/conteudos/
+# 766d59bd-a04f-41a9-b41b-5fb37a2f2a3a/algoritmos-de-ordenacao/
+# 1adc1a6e-51c7-4065-ae2c-e5f8194e7578?use_case=side_bar
+
+
+def sort(array):
+    if len(array) <= 1:
+        return array
+    mid = len(array) // 2
+    left, right = sort(array[:mid]), sort(array[mid:])
+    return merge(left, right, array.copy())
+
+
+def merge(left, right, merged):
+
+    left_cursor, right_cursor = 0, 0
+
+    while left_cursor < len(left) and right_cursor < len(right):
+
+        if left[left_cursor] <= right[right_cursor]:
+            merged[left_cursor + right_cursor] = left[left_cursor]
+            left_cursor += 1
+        else:
+            merged[left_cursor + right_cursor] = right[right_cursor]
+            right_cursor += 1
+
+    for left_cursor in range(left_cursor, len(left)):
+        merged[left_cursor + right_cursor] = left[left_cursor]
+
+    for right_cursor in range(right_cursor, len(right)):
+        merged[left_cursor + right_cursor] = right[right_cursor]
+
+    return merged
