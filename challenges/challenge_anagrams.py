@@ -38,12 +38,11 @@ def merge(array, aux, start, end):
             aux[position] = array[right]
             right += 1
 
-    for k in range(start, end + 1):
-        array[k] = aux[k]
+        start += 1
 
 
 def is_anagram(first_string, second_string):
     try:
-        pass
+        sort(first_string)
     except TypeError:
         return False
